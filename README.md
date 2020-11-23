@@ -16,7 +16,16 @@
 ## Configuring the AWS CLI
 
 ### AWS Configure 
-`$` `aws configure`  ```AWS Access Key ID [None]: `` `AKIAIOSFODNN7EXAMPLE` `` AWS Secret Access Key [None]: `` `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` `` Default region name [None]: `` `us-west-2` `` Default output format [None]: `` `json` `` ```
+
+    $ aws configure
+    AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+    AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    Default region name [None]: us-west-2
+    Default output format [None]: json
+
+### Access key ID and secret access key
+
+https://console.aws.amazon.com/iam/
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NzUxNTQzXX0=
+eyJoaXN0b3J5IjpbLTI0NjE0MTQxNV19
 -->
