@@ -1,0 +1,486 @@
+{
+  "ModelName": "Ski Resort Data Model",
+  "ModelMetadata": {
+    "Author": "Amazon Web Services, Inc.",
+    "DateCreated": "May 1, 2020, 11:00 AM",
+    "DateLastModified": "Nov 24, 2020, 10:38 PM",
+    "Description": "This data model represents an Amazon DynamoDB schema for a ski resort that has a large collection of data for each ski lift collected daily.\n\nThe important access patterns facilitated by this data model are:\n* Retrieval of all data for a given ski lift or overall resort, dynamic and static, facilitated by a table called SkiLifts\n* Retrieval of all dynamic data (including unique lift riders, snow coverage, avalanche danger, and lift status) for a ski lift or the overall resort on a specific date, facilitated by a table called SkiLifts\n* Retrieval of all static data (including if the lift is for experienced riders only, vertical feet the lift rises, and lift riding time) for a certain ski lift facilitated by a table called SkiLifts\n* Retrieval of date of data recorded for a certain ski lift or the overall resort sorted by total unique riders, facilitated by the SkiLifts table's global secondary index called SkiLiftsByRiders\n\nA simple way to model this application would be to define separate tables for ski lift dynamic data and static data. However, this data model uses an advanced design pattern and keeps both static and dynamic data in the same table. By having static and dynamic data in a single table, we can construct queries that return all the needed data with a single interaction with DynamoDB, speeding up the performance of the application for specific access patterns. The improved performance for specific access patterns comes at the cost of potentially reduced performance for other access patterns and increased application and query complexity.\n\nDisclaimer: It is a DynamoDB best practice that attribute names are kept as concise as possible to reduce space consumed on disk. The descriptive attribute names of this sample model are for demonstration purposes only.",
+    "Version": "2.0",
+    "AWSService": "Amazon DynamoDB"
+  },
+  "DataModel": [
+    {
+      "TableName": "SkiLifts",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "Lift",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "Metadata",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "TotalUniqueLiftRiders",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "AverageSnowCoverageInches",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "LiftStatus",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "AvalancheDanger",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "ExperiencedRidersOnly",
+          "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "VerticalFeet",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "LiftTime",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "OpenLifts",
+          "AttributeType": "NS"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "LiftStaticStats",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "Ski Lift",
+            "SortKeyAlias": "Metadata"
+          },
+          "TableData": [
+            {
+              "Lift": {
+                "S": "Lift 3"
+              },
+              "Metadata": {
+                "S": "Static Data"
+              },
+              "ExperiencedRidersOnly": {
+                "BOOL": false
+              },
+              "VerticalFeet": {
+                "N": "1300"
+              },
+              "LiftTime": {
+                "S": "7:30"
+              }
+            },
+            {
+              "Lift": {
+                "S": "Lift 23"
+              },
+              "Metadata": {
+                "S": "Static Data"
+              },
+              "ExperiencedRidersOnly": {
+                "BOOL": true
+              },
+              "VerticalFeet": {
+                "N": "900"
+              },
+              "LiftTime": {
+                "S": "5:45"
+              }
+            },
+            {
+              "Lift": {
+                "S": "Lift 16"
+              },
+              "Metadata": {
+                "S": "Static Data"
+              },
+              "ExperiencedRidersOnly": {
+                "BOOL": false
+              },
+              "VerticalFeet": {
+                "N": "1500"
+              },
+              "LiftTime": {
+                "S": "9:00"
+              }
+            },
+            {
+              "Lift": {
+                "S": "Lift 10"
+              },
+              "Metadata": {
+                "S": "Static Data"
+              },
+              "ExperiencedRidersOnly": {
+                "BOOL": true
+              },
+              "VerticalFeet": {
+                "N": "1000"
+              },
+              "LiftTime": {
+                "S": "6:00"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "ExperiencedRidersOnly",
+            "VerticalFeet",
+            "LiftTime"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "SkiLiftsByRiders",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "Lift",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "TotalUniqueLiftRiders",
+              "AttributeType": "N"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "INCLUDE",
+            "NonKeyAttributes": [
+              "Metadata"
+            ]
+          }
+        }
+      ],
+      "TableData": [
+        {
+          "Lift": {
+            "S": "Lift 3"
+          },
+          "Metadata": {
+            "S": "01/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "5000"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "30"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 23"
+          },
+          "Metadata": {
+            "S": "01/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "1000"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "45"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Considerable"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 16"
+          },
+          "Metadata": {
+            "S": "01/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "4500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "35"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 10"
+          },
+          "Metadata": {
+            "S": "01/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "0"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "40"
+          },
+          "LiftStatus": {
+            "S": "Pending"
+          },
+          "AvalancheDanger": {
+            "S": "High"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 3"
+          },
+          "Metadata": {
+            "S": "02/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "6000"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "35"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 23"
+          },
+          "Metadata": {
+            "S": "02/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "0"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "50"
+          },
+          "LiftStatus": {
+            "S": "Closed"
+          },
+          "AvalancheDanger": {
+            "S": "Extreme"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 16"
+          },
+          "Metadata": {
+            "S": "02/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "5500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "40"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 10"
+          },
+          "Metadata": {
+            "S": "02/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "3500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "45"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Moderate"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 3"
+          },
+          "Metadata": {
+            "S": "03/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "5500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "35"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 23"
+          },
+          "Metadata": {
+            "S": "03/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "1500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "45"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Moderate"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 16"
+          },
+          "Metadata": {
+            "S": "03/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "4000"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "40"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Lift 10"
+          },
+          "Metadata": {
+            "S": "03/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "2500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "45"
+          },
+          "LiftStatus": {
+            "S": "Open"
+          },
+          "AvalancheDanger": {
+            "S": "Moderate"
+          }
+        },
+        {
+          "Lift": {
+            "S": "Resort Data"
+          },
+          "Metadata": {
+            "S": "03/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "6000"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "40"
+          },
+          "AvalancheDanger": {
+            "S": "Low"
+          },
+          "OpenLifts": {
+            "NS": [
+              "3",
+              "23",
+              "16",
+              "10"
+            ]
+          }
+        },
+        {
+          "Lift": {
+            "S": "Resort Data"
+          },
+          "Metadata": {
+            "S": "01/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "5500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "35"
+          },
+          "AvalancheDanger": {
+            "S": "Considerable"
+          },
+          "OpenLifts": {
+            "NS": [
+              "3",
+              "23",
+              "16"
+            ]
+          }
+        },
+        {
+          "Lift": {
+            "S": "Resort Data"
+          },
+          "Metadata": {
+            "S": "02/01/20"
+          },
+          "TotalUniqueLiftRiders": {
+            "N": "6500"
+          },
+          "AverageSnowCoverageInches": {
+            "N": "45"
+          },
+          "AvalancheDanger": {
+            "S": "Moderate"
+          },
+          "OpenLifts": {
+            "NS": [
+              "3",
+              "16",
+              "10"
+            ]
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    }
+  ]
+}

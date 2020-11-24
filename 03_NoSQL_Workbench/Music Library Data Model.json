@@ -1,0 +1,249 @@
+{
+  "ModelName": "Music Library Data Model",
+  "ModelMetadata": {
+    "Author": "Amazon Web Services, Inc.",
+    "DateCreated": "Sep 05, 2019, 11:50 AM",
+    "DateLastModified": "Nov 24, 2020, 10:39 PM",
+    "Description": "This data model represents an Amazon DynamoDB schema for a music library application that has a large collection of songs and showcases its most downloaded songs in near-real time.\n\nThe important access patterns facilitated by this data model are:\n* Retrieval of a song record, facilitated by a table called Songs\n* Retrieval of a specific download record or all download records for a song, facilitated by a table called Songs\n* Retrieval of a specific monthly download count record or all monthly download count records for a song, facilitated by a table called Songs\n* Retrieval of all records (including song record, download records, and monthly download count records) for a song, facilitated by a table called Songs\n* Search for most downloaded songs, facilitated by the Songs table’s global secondary index called DownloadsByMonth\n\nA simple way to model this application would be to define separate tables for songs and download data. However, this data model uses an advanced design pattern and keeps both song and download data in the same table. By having song and download data in a single table, we can construct queries that return all the needed data with a single interaction with DynamoDB, speeding up the performance of the application for specific access patterns. The improved performance for specific access patterns comes at the cost of potentially reduced performance for other access patterns and increased application and query complexity.\n\nFor more information, see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-gsi-aggregation.html",
+    "Version": "2.0",
+    "AWSService": "Amazon DynamoDB"
+  },
+  "DataModel": [
+    {
+      "TableName": "Songs",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "Id",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "Metadata",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "DownloadMonth",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "TotalDownloadsInMonth",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Title",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Artist",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "TotalDownloads",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DownloadTimestamp",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "SongDetails",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "SongId",
+            "SortKeyAlias": "Metadata"
+          },
+          "NonKeyAttributes": [
+            "Title",
+            "Artist",
+            "TotalDownloads"
+          ],
+          "TableData": [
+            {
+              "Id": {
+                "S": "1"
+              },
+              "Metadata": {
+                "S": "Details"
+              },
+              "Title": {
+                "S": "Wild Love"
+              },
+              "Artist": {
+                "S": "Argyboots"
+              },
+              "TotalDownloads": {
+                "S": "3"
+              }
+            },
+            {
+              "Id": {
+                "S": "2"
+              },
+              "Metadata": {
+                "S": "Details"
+              },
+              "Title": {
+                "S": "Example Song Title"
+              },
+              "Artist": {
+                "S": "Jorge Souza"
+              },
+              "TotalDownloads": {
+                "S": "4"
+              }
+            }
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "Downloads",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "SongId",
+            "SortKeyAlias": "Metadata"
+          },
+          "NonKeyAttributes": [
+            "DownloadTimestamp"
+          ],
+          "TableData": [
+            {
+              "Id": {
+                "S": "1"
+              },
+              "Metadata": {
+                "S": "Dld-9349823681"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-01T00:00:07"
+              }
+            },
+            {
+              "Id": {
+                "S": "1"
+              },
+              "Metadata": {
+                "S": "Dld-9349823682"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-01T00:01:08"
+              }
+            },
+            {
+              "Id": {
+                "S": "1"
+              },
+              "Metadata": {
+                "S": "Dld-9349823683"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-01T00:20:10"
+              }
+            },
+            {
+              "Id": {
+                "S": "2"
+              },
+              "Metadata": {
+                "S": "Dld-9349823684"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-02T00:00:00"
+              }
+            },
+            {
+              "Id": {
+                "S": "2"
+              },
+              "Metadata": {
+                "S": "Dld-9349823685"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-03T00:00:02"
+              }
+            },
+            {
+              "Id": {
+                "S": "2"
+              },
+              "Metadata": {
+                "S": "Dld-9349836234"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-04T01:00:03"
+              }
+            },
+            {
+              "Id": {
+                "S": "2"
+              },
+              "Metadata": {
+                "S": "Dld-9349823686"
+              },
+              "DownloadTimestamp": {
+                "S": "2018-01-05T01:10:03"
+              }
+            }
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "LocalSecondaryIndexes": [],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "DownloadsByMonth",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "DownloadMonth",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "TotalDownloadsInMonth",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "TableData": [
+        {
+          "Id": {
+            "S": "1"
+          },
+          "Metadata": {
+            "S": "Month-01-2018"
+          },
+          "DownloadMonth": {
+            "S": "01-2018"
+          },
+          "TotalDownloadsInMonth": {
+            "S": "3"
+          }
+        },
+        {
+          "Id": {
+            "S": "2"
+          },
+          "Metadata": {
+            "S": "Month-01-2018"
+          },
+          "DownloadMonth": {
+            "S": "01-2018"
+          },
+          "TotalDownloadsInMonth": {
+            "S": "4"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    }
+  ]
+}

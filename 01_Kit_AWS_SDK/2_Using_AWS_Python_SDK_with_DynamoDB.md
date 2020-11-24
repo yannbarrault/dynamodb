@@ -9,3 +9,6 @@
 - Batch writing
 - Querying and scanning
 - Deleting a table
+
+Autres ressources:
+[Python Code Samples for Amazon DynamoDB](https://docs.aws.amazon.com/code-samples/latest/catalog/code-catalog-python-example_code-dynamodb.html)

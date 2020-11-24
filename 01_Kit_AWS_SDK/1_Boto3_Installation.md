@@ -117,3 +117,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 print(bucket.name)
 >>> exit()
 ```
+
+## Documentation
+
+[Boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
