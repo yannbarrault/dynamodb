@@ -1,0 +1,11 @@
+# Using AWS Python SDK with DynamoDB
+
+- Creating a new table
+- Using an existing table
+- Creating a new item
+- Getting an item
+- Updating an item
+- Deleting an item
+- Batch writing
+- Querying and scanning
+- Deleting a table
