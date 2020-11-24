@@ -11,3 +11,13 @@ aws dynamodb put-item \
         "AlbumTitle": {"S": "Songs About Life"} }' \
     --return-consumed-capacity TOTAL \
     --endpoint-url http://localhost:8000 
+
+REPONSE
+============
+
+{
+    "ConsumedCapacity": {
+        "TableName": "Music",
+        "CapacityUnits": 1.0
+    }
+}
