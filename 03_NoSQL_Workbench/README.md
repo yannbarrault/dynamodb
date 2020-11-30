@@ -18,3 +18,8 @@ Créez une facet pour visualiser la remontée, son altitude et la durée de sa r
 Trouvez le nombre total de passagers uniques qui ont empruntés l'une des remontées le 03/01/20
 
 Générez le code et exécutez la requête depuis l'AWS SDK de votre choix
+
+
+### Resources
+
+https://docs.aws.amazon.com/fr_fr/amazondynamodb/latest/developerguide/workbench.html
