@@ -12,9 +12,9 @@ Y-a-t-il des indexes GSI/LSI ?
 Chargez l'exemple concernant les remontées mécaniques (code/Ski Resort Data Model.json) et répondez aux questions suivantes:
 
 Quel(s) est(sont) les remontées mécaniques dont la durée de remontée est la plus longue ?
+
 Créez une facet pour visualiser la remontée, son altitude et la durée de sa remontée.
+
 Trouvez le nombre total de passagers uniques qui ont empruntés l'une des remontées le 03/01/20
+
 Générez le code et exécutez la requête depuis l'AWS SDK de votre choix
-
-
-

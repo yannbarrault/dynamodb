@@ -1,6 +1,7 @@
 # Create and Query a NoSQL Table
 
-Tutorial: https://aws.amazon.com/getting-started/hands-on/create-nosql-table/
+Tutorial: https://aws.amazon.com/fr/getting-started/hands-on/create-nosql-table/
+
 
 ## Prerequis
 - Console AWS
