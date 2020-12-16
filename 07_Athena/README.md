@@ -1,0 +1,1 @@
+https://docs.aws.amazon.com/athena/latest/ug/getting-started.html
